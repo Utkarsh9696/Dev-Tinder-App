@@ -1,24 +1,37 @@
 const express = require('express' )
+const { adminAuth, userAuth} = require('./middleware/auth')
 
 const app = express();
 
-app.get("/user/data", (req,res)=>{
-    res.send('User Data')
-})
-app.get("/user", (req,res)=> {
-    res.send({firstName : "Utkarsh", lastName : "Singh"})
-})
+app.use('/admin', adminAuth)
 
-
-app.use("/test", (req, res) => {
-    res.send('inside the test route')
+app.get('/user/login', (req,res)=>{
+    res.send('User logged in successfully')
 })
 
-app.use("/", (req,res)=>{
-    res.send('Hello welcome to the server'
-    )
+app.get("/user", userAuth, (req,res)=>{
+     res.send('User Data')
+   
 })
 
+
+app.use('/admin/getAllData', (req,res)=>{
+
+    throw new Error('buiebuiefbkef')
+    res.send('All Data Sent')
+})
+
+app.use('/', (err,req,res,next)=>{  
+    if(err){
+        res.status(500).send('Somthing went wrong')
+    }
+})
+
+app.use("/", (req, res) => {
+    res.send('Welcome')
+})
+
+ 
 
 
 app.listen(3000, ()=>{
